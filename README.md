@@ -1,16 +1,48 @@
-# React + Vite
+# TaskSphere
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Production-style SaaS Admin Dashboard built with React.js.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Authentication System
+- Protected Routes
+- CRUD Operations
+- Search & Pagination
+- Redux Toolkit State Management
+- Role-Based Access Control
+- Theme Persistence
+- Responsive Dashboard UI
+- Axios Interceptors
+- Lazy Loading & Code Splitting
+- Toast Notifications
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React.js
+- Redux Toolkit
+- Tailwind CSS
+- Axios
+- React Router DOM
+- Chart.js
+- React Hot Toast
+- Vite
+
+---
+
+## Project Overview
+
+TaskSphere is a modern admin dashboard application inspired by real-world SaaS products.  
+The project focuses on scalable frontend architecture, reusable components, state management, API handling, and production-level React patterns.
+
+---
+
+##  Live Demo
+
+https://tasksphere-sigma.vercel.app
+
+---
+

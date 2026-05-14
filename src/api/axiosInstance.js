@@ -1,13 +1,23 @@
 import axios from "axios";
 
+console.log(
+  import.meta.env.VITE_API_BASE_URL
+);
+
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL:
+    import.meta.env.VITE_API_BASE_URL,
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const user =
-      JSON.parse(localStorage.getItem("user"));
+
+    const storedUser =
+      localStorage.getItem("user");
+
+    const user = storedUser
+      ? JSON.parse(storedUser)
+      : null;
 
     if (user) {
       config.headers.Authorization =
@@ -28,10 +38,14 @@ axiosInstance.interceptors.response.use(
   },
 
   (error) => {
-    console.log("Global API Error:", error);
+
+    console.log(
+      "Global API Error:",
+      error
+    );
 
     return Promise.reject(error);
   }
 );
 
-export default axiosInstance;
+export default axiosInstance;x

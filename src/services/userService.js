@@ -1,10 +1,9 @@
-import axios from "axios";
-
-const BASE_URL = "https://dummyjson.com";
+import axiosInstance from "../api/axiosInstance";
 
 export const getUsers = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/users`);
+    const response =
+      await axiosInstance.get("/users");
 
     return response.data.users;
   } catch (error) {

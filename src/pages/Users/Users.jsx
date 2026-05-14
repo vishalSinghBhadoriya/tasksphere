@@ -6,7 +6,12 @@ import UsersTable from "../../components/tables/UsersTable";
 import Loader from "../../components/common/Loader";
 
 import { getUsers } from "../../services/userService";
-
+import Modal from "../../components/common/Modal";
+import useDebounce from "../../hooks/useDebounce";
+import UserForm from "./UserForm";
+import { useMemo } from "react";
+import { useCallback } from "react";
+import toast from "react-hot-toast";
 function Users() {
   const [users, setUsers] = useState([]);
 
@@ -14,14 +19,20 @@ function Users() {
 
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearch =
+  useDebounce(searchTerm, 500);
   const [currentPage, setCurrentPage] = useState(1);
 
 const usersPerPage = 5;
-  const filteredUsers = users.filter((user) =>
-  `${user.firstName} ${user.lastName}`
-    .toLowerCase()
-    .includes(searchTerm.toLowerCase())
-);
+const filteredUsers = useMemo(() => {
+  return users.filter((user) =>
+    `${user.firstName} ${user.lastName}`
+      .toLowerCase()
+      .includes(
+        debouncedSearch.toLowerCase()
+      )
+  );
+}, [users, debouncedSearch]);
 const totalPages = Math.ceil(
   filteredUsers.length / usersPerPage
 );
@@ -32,6 +43,11 @@ const paginatedUsers = filteredUsers.slice(
   startIndex,
   startIndex + usersPerPage
 );
+const [isModalOpen, setIsModalOpen] =
+  useState(false);
+
+const [editingUser, setEditingUser] =
+  useState(null);
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -45,11 +61,37 @@ const paginatedUsers = filteredUsers.slice(
       setUsers(data);
     } catch (err) {
       setError("Failed to fetch users");
+      toast.error("Failed to fetch users");
     } finally {
       setLoading(false);
     }
   };
+const handleAddUser = (newUser) => {
+  setUsers((prev) => [newUser, ...prev]);
 
+  setIsModalOpen(false);
+  toast.success("User added successfully");
+};
+const handleEditUser = (updatedUser) => {
+  setUsers((prev) =>
+    prev.map((user) =>
+      user.id === updatedUser.id
+        ? updatedUser
+        : user
+    )
+  );
+
+  setEditingUser(null);
+
+  setIsModalOpen(false);
+  toast.success("User updated successfully");
+};
+const handleDeleteUser = useCallback((id) => {
+  setUsers((prev) =>
+    prev.filter((user) => user.id !== id)
+  );
+  toast.success("User deleted successfully");
+}, []);
   return (
     <DashboardLayout>
       
@@ -76,7 +118,20 @@ const paginatedUsers = filteredUsers.slice(
         {!loading && !error && (
           <>
           <div className="bg-white p-4 rounded-2xl shadow-sm">
+  <div className="flex justify-end">
   
+  <button
+    onClick={() => {
+      setEditingUser(null);
+
+      setIsModalOpen(true);
+    }}
+    className="bg-black text-white px-5 py-3 rounded-xl"
+  >
+    Add User
+  </button>
+
+</div>
   <input
     type="text"
     placeholder="Search users..."
@@ -86,7 +141,15 @@ const paginatedUsers = filteredUsers.slice(
   />
 
 </div>
-          <UsersTable users={paginatedUsers} />
+          <UsersTable
+  users={paginatedUsers}
+  onEdit={(user) => {
+    setEditingUser(user);
+
+    setIsModalOpen(true);
+  }}
+  onDelete={handleDeleteUser}
+/>
           <div className="flex items-center justify-center gap-3 mt-6">
 
   <button
@@ -112,7 +175,26 @@ const paginatedUsers = filteredUsers.slice(
   >
     Next
   </button>
+<Modal
+  isOpen={isModalOpen}
+  onClose={() => setIsModalOpen(false)}
+  title={
+    editingUser
+      ? "Edit User"
+      : "Add User"
+  }
+>
+  
+  <UserForm
+    initialData={editingUser}
+    onSubmit={
+      editingUser
+        ? handleEditUser
+        : handleAddUser
+    }
+  />
 
+</Modal>
 </div>
           </>
         )}

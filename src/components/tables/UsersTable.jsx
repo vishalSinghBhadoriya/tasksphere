@@ -1,4 +1,11 @@
-function UsersTable({ users }) {
+
+import React from "react";
+function UsersTable({
+  users,
+  onEdit,
+  onDelete,
+}) {
+    
   return (
     <div className="overflow-x-auto bg-white rounded-2xl shadow-sm">
       
@@ -6,10 +13,12 @@ function UsersTable({ users }) {
         
         <thead className="border-b bg-gray-50">
           <tr>
+            
             <th className="p-4">Name</th>
             <th className="p-4">Email</th>
             <th className="p-4">Age</th>
             <th className="p-4">Role</th>
+            <th className="p-4">Actions</th>
           </tr>
         </thead>
 
@@ -34,6 +43,23 @@ function UsersTable({ users }) {
               <td className="p-4">
                 Employee
               </td>
+              <td className="p-4 flex gap-2">
+
+  <button
+    onClick={() => onEdit(user)}
+    className="bg-blue-500 text-white px-3 py-1 rounded-lg"
+  >
+    Edit
+  </button>
+
+  <button
+    onClick={() => onDelete(user.id)}
+    className="bg-red-500 text-white px-3 py-1 rounded-lg"
+  >
+    Delete
+  </button>
+
+</td>
             </tr>
           ))}
         </tbody>
@@ -43,4 +69,4 @@ function UsersTable({ users }) {
   );
 }
 
-export default UsersTable;
+export default React.memo(UsersTable);

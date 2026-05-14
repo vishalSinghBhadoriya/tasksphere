@@ -1,23 +1,51 @@
 import { Routes, Route } from "react-router-dom";
-
-import Dashboard from "./pages/Dashboard/Dashboard";
-import Users from "./pages/Users/Users";
 import Login from "./pages/Auth/Login";
-import Projects from "./pages/Projects/Projects";
-import Tasks from "./pages/Tasks/Tasks";
-import Analytics from "./pages/Analytics/Analytics";
-import Settings from "./pages/Settings/Settings";
+const Dashboard = lazy(() =>
+  import("./pages/Dashboard/Dashboard")
+);
+
+const Users = lazy(() =>
+  import("./pages/Users/Users")
+);
+
+const Projects = lazy(() =>
+  import("./pages/Projects/Projects")
+);
+
+const Tasks = lazy(() =>
+  import("./pages/Tasks/Tasks")
+);
+
+const Analytics = lazy(() =>
+  import("./pages/Analytics/Analytics")
+);
+
+const Settings = lazy(() =>
+  import("./pages/Settings/Settings")
+);
+import ProtectedRoute from "./routes/ProtectedRoute";
+import { lazy, Suspense } from "react";
 function App() {
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+     <Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  }
+/>
+
       <Route path="/users" element={<Users />} />
       <Route path="/projects" element={<Projects />} />
 <Route path="/tasks" element={<Tasks />} />
 <Route path="/analytics" element={<Analytics />} />
 <Route path="/settings" element={<Settings />} />
     </Routes>
+    </Suspense>
   );
 }
 

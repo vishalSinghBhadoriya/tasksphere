@@ -35,6 +35,7 @@ function Sidebar() {
       title: "Analytics",
       path: "/analytics",
       icon: <BarChart3 size={20} />,
+       role: "admin",
     },
     {
       title: "Settings",

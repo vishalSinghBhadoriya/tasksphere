@@ -48,4 +48,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export default axiosInstance;x
+export default axiosInstance;

@@ -1,3 +1,7 @@
+import {
+  useMemo,
+  useState,
+} from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 
 import Badge from "../../components/common/Badge";
@@ -58,7 +62,16 @@ function Tasks() {
       assignedTo: "Karan",
     },
   ];
+const [statusFilter, setStatusFilter] =
+  useState("All");
 
+const [
+  priorityFilter,
+  setPriorityFilter,
+] = useState("All");
+
+const [sortBy, setSortBy] =
+  useState("default");
   const getPriorityBadge = (
     priority
   ) => {
@@ -97,7 +110,54 @@ function Tasks() {
         return "default";
     }
   };
+const filteredTasks = useMemo(() => {
+  let filtered = [...tasks];
 
+  // Status Filter
+  if (statusFilter !== "All") {
+    filtered = filtered.filter(
+      (task) =>
+        task.status === statusFilter
+    );
+  }
+
+  // Priority Filter
+  if (priorityFilter !== "All") {
+    filtered = filtered.filter(
+      (task) =>
+        task.priority ===
+        priorityFilter
+    );
+  }
+
+  // Sorting
+  if (sortBy === "priority") {
+    const priorityOrder = {
+      High: 1,
+      Medium: 2,
+      Low: 3,
+    };
+
+    filtered.sort(
+      (a, b) =>
+        priorityOrder[a.priority] -
+        priorityOrder[b.priority]
+    );
+  }
+
+  if (sortBy === "name") {
+    filtered.sort((a, b) =>
+      a.title.localeCompare(b.title)
+    );
+  }
+
+  return filtered;
+}, [
+  tasks,
+  statusFilter,
+  priorityFilter,
+  sortBy,
+]);
   return (
     <DashboardLayout>
       
@@ -113,7 +173,96 @@ function Tasks() {
             Track and manage tasks
           </p>
         </div>
+<div className="flex flex-col md:flex-row gap-4">
 
+  {/* Status Filter */}
+  <select
+    value={statusFilter}
+    onChange={(e) =>
+      setStatusFilter(
+        e.target.value
+      )
+    }
+    className="border border-zinc-300 rounded-xl px-4 py-3"
+  >
+    
+    <option value="All">
+      All Status
+    </option>
+
+    <option value="Pending">
+      Pending
+    </option>
+
+    <option value="In Progress">
+      In Progress
+    </option>
+
+    <option value="Completed">
+      Completed
+    </option>
+
+    <option value="In Review">
+      In Review
+    </option>
+
+  </select>
+
+  {/* Priority Filter */}
+  <select
+    value={priorityFilter}
+    onChange={(e) =>
+      setPriorityFilter(
+        e.target.value
+      )
+    }
+    className="border border-zinc-300 rounded-xl px-4 py-3"
+  >
+    
+    <option value="All">
+      All Priority
+    </option>
+
+    <option value="High">
+      High
+    </option>
+
+    <option value="Medium">
+      Medium
+    </option>
+
+    <option value="Low">
+      Low
+    </option>
+
+  </select>
+
+  {/* Sorting */}
+  <select
+    value={sortBy}
+    onChange={(e) =>
+      setSortBy(
+        e.target.value
+      )
+    }
+    className="border border-zinc-300 rounded-xl px-4 py-3"
+  >
+    
+    <option value="default">
+      Default Sort
+    </option>
+
+    <option value="priority">
+      Sort By Priority
+    </option>
+
+    <option value="name">
+      Sort By Name
+    </option>
+
+  </select>
+
+</div>
         {/* Table */}
         <Card className="overflow-x-auto">
 
@@ -153,7 +302,7 @@ function Tasks() {
             {/* Body */}
             <tbody>
 
-              {tasks.map((task) => (
+              {filteredTasks.map((task) => (
                 <tr
                   key={task.id}
                   className="border-b hover:bg-zinc-50 transition-all"

@@ -123,17 +123,13 @@ if (
           }
           className="lg:hidden"
         >
-          <Menu size={26} />
+          <Menu className="text-white" size={26} />
         </button>
 
         <div>
-          <h2 className="text-xl font-bold">
-            Dashboard
+          <h2 className="text-xl text-white font-bold">
+             Welcome back
           </h2>
-
-          <p className="text-sm text-gray-500">
-            Welcome back 👋
-          </p>
         </div>
 
       </div>
@@ -232,7 +228,7 @@ if (
           />
 
           <div className="hidden md:block">
-            <h4 className="font-semibold text-sm">
+            <h4 className="font-semibold text-white text-sm">
               {user?.name}
             </h4>
 
@@ -241,7 +237,7 @@ if (
             </p>
           </div>
 
-          <ChevronDown size={18} />
+          <ChevronDown size={18} className="text-white" />
           {isDropdownOpen && (
   <div className="absolute top-14 right-0 w-52 bg-white rounded-2xl shadow-lg border border-zinc-200 p-2 z-50">
     

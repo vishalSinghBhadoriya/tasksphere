@@ -1,29 +1,42 @@
 import Card from "../../components/common/Card";
 
-function DashboardStats() {
-  const stats = [
+function DashboardStats({ stats }) {
+  const statsData = [
     {
       title: "Total Users",
-      value: "12,430",
+      value: stats.totalUsers,
     },
+
     {
-      title: "Projects",
-      value: "320",
+      title: "Active Projects",
+      value: stats.activeProjects,
     },
+
+    {
+      title: "Completed Tasks",
+      value: stats.completedTasks,
+    },
+
     {
       title: "Revenue",
-      value: "₹2,40,000",
+      value: `₹${stats.revenue.toLocaleString()}`,
     },
     {
-      title: "Tasks Completed",
-      value: "1,204",
-    },
+  title: "Total Users",
+  value: stats.totalUsers,
+  growth: "+12%",
+},
   ];
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-      {stats.map((item, index) => (
-        <Card key={index}>
+      
+      {statsData.map((item, index) => (
+        <Card
+          key={index}
+          className="hover:shadow-md transition-all duration-300"
+        >
+          
           <h3 className="text-gray-500 text-sm">
             {item.title}
           </h3>
@@ -31,8 +44,12 @@ function DashboardStats() {
           <h1 className="text-3xl font-bold mt-2">
             {item.value}
           </h1>
+          <p className="text-green-500 text-sm mt-2">
+  {item.growth} this month
+</p>
         </Card>
       ))}
+
     </div>
   );
 }

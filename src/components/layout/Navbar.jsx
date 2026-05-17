@@ -35,7 +35,32 @@ function Navbar() {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] =
   useState(false);
+  const [
+  isNotificationOpen,
+  setIsNotificationOpen,
+] = useState(false);
 const dropdownRef = useRef(null);
+const notificationRef =
+  useRef(null);
+  const notifications = [
+  {
+    id: 1,
+    title: "New user registered",
+    time: "2 min ago",
+  },
+
+  {
+    id: 2,
+    title: "Project updated",
+    time: "10 min ago",
+  },
+
+  {
+    id: 3,
+    title: "Task completed",
+    time: "1 hour ago",
+  },
+];
   const darkMode = useSelector(
     (state) => state.theme.darkMode
   );
@@ -56,13 +81,22 @@ useEffect(() => {
     event
   ) => {
     if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(
-        event.target
-      )
-    ) {
-      setIsDropdownOpen(false);
-    }
+  dropdownRef.current &&
+  !dropdownRef.current.contains(
+    event.target
+  )
+) {
+  setIsDropdownOpen(false);
+}
+
+if (
+  notificationRef.current &&
+  !notificationRef.current.contains(
+    event.target
+  )
+) {
+  setIsNotificationOpen(false);
+}
   };
 
   document.addEventListener(
@@ -122,14 +156,64 @@ useEffect(() => {
         </button>
 
         {/* Notifications */}
-        <button className="relative w-10 h-10 rounded-xl bg-zinc-100 flex items-center justify-center">
-          
-          <Bell size={18} />
+ <div
+  ref={notificationRef}
+  className="relative"
+>
+  
+  <button
+    onClick={() =>
+      setIsNotificationOpen(
+        !isNotificationOpen
+      )
+    }
+    className="relative w-10 h-10 rounded-xl bg-zinc-100 flex items-center justify-center"
+  >
+    
+    <Bell size={18} />
 
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
+  {notifications.length}
+</span>
 
-        </button>
+  </button>
+  {isNotificationOpen && (
+  <div className="absolute top-14 right-0 w-80 bg-white rounded-2xl shadow-lg border border-zinc-200 z-50 overflow-hidden">
+    
+    {/* Header */}
+    <div className="p-4 border-b">
+      <h3 className="font-semibold text-lg">
+        Notifications
+      </h3>
+    </div>
 
+    {/* Notification List */}
+    <div className="max-h-96 overflow-y-auto">
+
+      {notifications.map(
+        (notification) => (
+          <div
+            key={notification.id}
+            className="p-4 border-b hover:bg-zinc-50 transition-all cursor-pointer"
+          >
+            
+            <h4 className="font-medium text-sm">
+              {notification.title}
+            </h4>
+
+            <p className="text-xs text-gray-500 mt-1">
+              {notification.time}
+            </p>
+
+          </div>
+        )
+      )}
+
+    </div>
+
+  </div>
+)}
+</div>
         {/* Profile */}
         <div
         ref={dropdownRef}

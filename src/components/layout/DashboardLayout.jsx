@@ -9,12 +9,12 @@ function DashboardLayout({ children }) {
   );
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       
       <Sidebar />
 
       <div
-        className={`flex-1 min-h-screen ml-64 transition-all duration-300
+        className={`flex-1 lg:ml-64 transition-all duration-300
         ${
           darkMode
             ? "bg-zinc-900 "

@@ -4,6 +4,8 @@ import { toggleTheme } from "../../redux/features/themeSlice";
 import { logout } from "../../redux/features/authSlice";
 
 import { useNavigate } from "react-router-dom";
+import { Menu } from "lucide-react";
+import { toggleSidebar } from "../../redux/features/sidebarSlice";
 function Navbar() {
   const dispatch = useDispatch();
 
@@ -19,8 +21,15 @@ const handleLogout = () => {
   navigate("/");
 };
   return (
-    <div className="bg-white shadow px-6 py-4 flex items-center justify-between">
-      
+   <div className="bg-white shadow px-4 md:px-6 py-4 flex items-center justify-between">
+      <button
+  onClick={() =>
+    dispatch(toggleSidebar())
+  }
+  className="lg:hidden"
+>
+  <Menu size={28} />
+</button>
       <h2 className="text-xl font-semibold">
         Welcome Back
       </h2>

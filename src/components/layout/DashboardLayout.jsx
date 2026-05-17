@@ -14,10 +14,10 @@ function DashboardLayout({ children }) {
       <Sidebar />
 
       <div
-        className={`flex-1 min-h-screen transition-all duration-300
+        className={`flex-1 min-h-screen ml-64 transition-all duration-300
         ${
           darkMode
-            ? "bg-zinc-900 text-white"
+            ? "bg-zinc-900 "
             : "bg-zinc-100 text-black"
         }`}
       >

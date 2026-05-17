@@ -6,7 +6,7 @@ import {
   BarChart3,
   Settings,
 } from "lucide-react";
-
+import logo from "../../assets/TaskSphere-logo.png";
 import { NavLink } from "react-router-dom";
 
 function Sidebar() {
@@ -45,12 +45,8 @@ function Sidebar() {
   ];
 
   return (
-    <div className="w-64 bg-zinc-900 text-white h-screen p-5">
-      
-      <h1 className="text-3xl font-bold mb-10">
-        TaskSphere
-      </h1>
-
+    <div className="w-64 bg-zinc-900 text-white h-screen p-5 fixed top-0 left-0">
+      <img src={logo} className="mb-10 mt-1"></img>
       <ul className="space-y-2">
         {menuItems.map((item) => (
           <li key={item.title}>

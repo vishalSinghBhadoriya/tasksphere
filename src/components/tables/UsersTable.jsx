@@ -1,5 +1,6 @@
 
 import React from "react";
+import Badge from "../common/Badge";
 function UsersTable({
   users,
   onEdit,
@@ -41,7 +42,9 @@ function UsersTable({
               </td>
 
               <td className="p-4">
-                Employee
+               <Badge type="success">
+  Active
+</Badge>
               </td>
               <td className="p-4 flex gap-2">
 

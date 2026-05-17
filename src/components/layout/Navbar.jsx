@@ -1,51 +1,195 @@
-import { useDispatch, useSelector } from "react-redux";
-
-import { toggleTheme } from "../../redux/features/themeSlice";
-import { logout } from "../../redux/features/authSlice";
+import {
+  Bell,
+  Menu,
+  Moon,
+  Sun,
+  ChevronDown,
+} from "lucide-react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  useDispatch,
+  useSelector,
+} from "react-redux";
 
 import { useNavigate } from "react-router-dom";
-import { Menu } from "lucide-react";
-import { toggleSidebar } from "../../redux/features/sidebarSlice";
+
+import {
+  logout,
+} from "../../redux/features/authSlice";
+
+import {
+  toggleTheme,
+} from "../../redux/features/themeSlice";
+
+import {
+  toggleSidebar,
+} from "../../redux/features/sidebarSlice";
+
 function Navbar() {
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+  const [isDropdownOpen, setIsDropdownOpen] =
+  useState(false);
+const dropdownRef = useRef(null);
   const darkMode = useSelector(
     (state) => state.theme.darkMode
   );
-  const navigate = useNavigate();
-const handleLogout = () => {
-  localStorage.removeItem("user");
 
-  dispatch(logout());
+  const user = useSelector(
+    (state) => state.auth.user
+  );
 
-  navigate("/");
-};
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+
+    dispatch(logout());
+
+    navigate("/");
+  };
+useEffect(() => {
+  const handleClickOutside = (
+    event
+  ) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(
+        event.target
+      )
+    ) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  document.addEventListener(
+    "mousedown",
+    handleClickOutside
+  );
+
+  return () => {
+    document.removeEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+  };
+}, []);
   return (
-   <div className="bg-white shadow px-4 md:px-6 py-4 flex items-center justify-between">
-      <button
-  onClick={() =>
-    dispatch(toggleSidebar())
-  }
-  className="lg:hidden"
->
-  <Menu size={28} />
-</button>
-      <h2 className="text-xl font-semibold">
-        Welcome Back
-      </h2>
+    <div className="bg-white dark:bg-zinc-900 border-b px-4 md:px-6 py-4 flex items-center justify-between">
+      
+      {/* Left */}
+      <div className="flex items-center gap-4">
 
-      <button
-        onClick={() => dispatch(toggleTheme())}
-        className="bg-black text-white px-4 py-2 rounded-lg"
-      >
-        {darkMode ? "Dark Mode" : "Light Mode"}
-      </button>
-      <button
-  onClick={handleLogout}
-  className="bg-red-500 text-white px-4 py-2 rounded-lg ml-3"
->
-  Logout
-</button>
+        <button
+          onClick={() =>
+            dispatch(toggleSidebar())
+          }
+          className="lg:hidden"
+        >
+          <Menu size={26} />
+        </button>
+
+        <div>
+          <h2 className="text-xl font-bold">
+            Dashboard
+          </h2>
+
+          <p className="text-sm text-gray-500">
+            Welcome back 👋
+          </p>
+        </div>
+
+      </div>
+
+      {/* Right */}
+      <div className="flex items-center gap-4">
+
+        {/* Theme Toggle */}
+        <button
+          onClick={() =>
+            dispatch(toggleTheme())
+          }
+          className="w-10 h-10 rounded-xl bg-zinc-100 flex items-center justify-center"
+        >
+          {darkMode ? (
+            <Sun size={18} />
+          ) : (
+            <Moon size={18} />
+          )}
+        </button>
+
+        {/* Notifications */}
+        <button className="relative w-10 h-10 rounded-xl bg-zinc-100 flex items-center justify-center">
+          
+          <Bell size={18} />
+
+          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+
+        </button>
+
+        {/* Profile */}
+        <div
+        ref={dropdownRef}
+  onClick={() =>
+    setIsDropdownOpen(
+      !isDropdownOpen
+    )
+  }
+  className="relative flex items-center gap-3 cursor-pointer"
+> 
+
+          <img
+            src={`https://ui-avatars.com/api/?name=${user?.name}`}
+            alt="profile"
+            className="w-10 h-10 rounded-full"
+          />
+
+          <div className="hidden md:block">
+            <h4 className="font-semibold text-sm">
+              {user?.name}
+            </h4>
+
+            <p className="text-xs text-gray-500">
+              {user?.role}
+            </p>
+          </div>
+
+          <ChevronDown size={18} />
+          {isDropdownOpen && (
+  <div className="absolute top-14 right-0 w-52 bg-white rounded-2xl shadow-lg border border-zinc-200 p-2 z-50">
+    
+    <button className="w-full text-left px-4 py-3 rounded-xl hover:bg-zinc-100 transition-all">
+      My Profile
+    </button>
+
+    <button className="w-full text-left px-4 py-3 rounded-xl hover:bg-zinc-100 transition-all">
+      Settings
+    </button>
+
+    <button
+      onClick={handleLogout}
+      className="w-full text-left px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-all"
+    >
+      Logout
+    </button>
+
+  </div>
+)}
+
+        </div>
+
+        {/* Logout */}
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white px-4 py-2 rounded-xl hidden md:block"
+        >
+          Logout
+        </button>
+
+      </div>
 
     </div>
   );

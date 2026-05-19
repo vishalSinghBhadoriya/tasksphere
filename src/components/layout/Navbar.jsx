@@ -28,7 +28,7 @@ import {
 import {
   toggleSidebar,
 } from "../../redux/features/sidebarSlice";
-
+import { Link } from "react-router-dom";
 function Navbar() {
   const dispatch = useDispatch();
 
@@ -241,13 +241,19 @@ if (
           {isDropdownOpen && (
   <div className="absolute top-14 right-0 w-52 bg-white rounded-2xl shadow-lg border border-zinc-200 p-2 z-50">
     
-    <button className="w-full text-left px-4 py-3 rounded-xl hover:bg-zinc-100 transition-all">
-      My Profile
-    </button>
 
-    <button className="w-full text-left px-4 py-3 rounded-xl hover:bg-zinc-100 transition-all">
-      Settings
-    </button>
+ <Link
+  to="/settings"
+  className="block w-full text-left px-4 py-3 rounded-xl hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all"
+>
+   My Profile
+</Link>
+  <Link
+  to="/settings"
+  className="block w-full text-left px-4 py-3 rounded-xl hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all"
+>
+  Settings
+</Link>
 
     <button
       onClick={handleLogout}

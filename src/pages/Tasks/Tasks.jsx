@@ -264,117 +264,99 @@ const filteredTasks = useMemo(() => {
 
 </div>
         {/* Table */}
-        <Card className="overflow-x-auto">
+{/* Desktop Table */}
+<div className="hidden lg:block">
+  <Card className="overflow-x-auto">
+    <table className="w-full text-left">
+      <thead className="border-b bg-zinc-50 ">
+        <tr>
+          <th className="p-4">Task</th>
+          <th className="p-4">Priority</th>
+          <th className="p-4">Status</th>
+          <th className="p-4">Due Date</th>
+          <th className="p-4">Assigned To</th>
+          <th className="p-4">Actions</th>
+        </tr>
+      </thead>
 
-          <table className="w-full text-left min-w-[800px]">
-            
-            {/* Head */}
-            <thead className="border-b bg-zinc-50">
-              
-              <tr>
-                <th className="p-4">
-                  Task
-                </th>
+      <tbody>
+        {filteredTasks.map((task) => (
+          <tr
+            key={task.id}
+            className="border-b hover:bg-zinc-50  transition-all"
+          >
+            <td className="p-4 font-medium">{task.title}</td>
 
-                <th className="p-4">
-                  Priority
-                </th>
+            <td className="p-4">
+              <Badge type={getPriorityBadge(task.priority)}>
+                {task.priority}
+              </Badge>
+            </td>
 
-                <th className="p-4">
-                  Status
-                </th>
+            <td className="p-4">
+              <Badge type={getStatusBadge(task.status)}>
+                {task.status}
+              </Badge>
+            </td>
 
-                <th className="p-4">
-                  Due Date
-                </th>
+            <td className="p-4 text-gray-500 dark:text-gray-400">
+              {task.dueDate}
+            </td>
 
-                <th className="p-4">
-                  Assigned To
-                </th>
+            <td className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm">
+                  {task.assignedTo.charAt(0)}
+                </div>
+                <span>{task.assignedTo}</span>
+              </div>
+            </td>
 
-                <th className="p-4">
-                  Actions
-                </th>
-              </tr>
+            <td className="p-4">
+              <button className="text-sm font-medium hover:underline">
+                View
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </Card>
+</div>
 
-            </thead>
+{/* Mobile Cards */}
+<div className="lg:hidden space-y-4">
+  {filteredTasks.map((task) => (
+    <Card key={task.id} className="p-4 space-y-4">
+      <div>
+        <h3 className="font-semibold text-lg">{task.title}</h3>
+      </div>
 
-            {/* Body */}
-            <tbody>
+      <div className="flex flex-wrap gap-2">
+        <Badge type={getPriorityBadge(task.priority)}>
+          {task.priority}
+        </Badge>
 
-              {filteredTasks.map((task) => (
-                <tr
-                  key={task.id}
-                  className="border-b hover:bg-zinc-50 transition-all"
-                >
-                  
-                  {/* Task */}
-                  <td className="p-4 font-medium">
-                    {task.title}
-                  </td>
+        <Badge type={getStatusBadge(task.status)}>
+          {task.status}
+        </Badge>
+      </div>
 
-                  {/* Priority */}
-                  <td className="p-4">
-                    <Badge
-                      type={getPriorityBadge(
-                        task.priority
-                      )}
-                    >
-                      {task.priority}
-                    </Badge>
-                  </td>
+      <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
+        <p>
+          <strong>Due Date:</strong> {task.dueDate}
+        </p>
+        <p>
+          <strong>Assigned To:</strong> {task.assignedTo}
+        </p>
+      </div>
 
-                  {/* Status */}
-                  <td className="p-4">
-                    <Badge
-                      type={getStatusBadge(
-                        task.status
-                      )}
-                    >
-                      {task.status}
-                    </Badge>
-                  </td>
-
-                  {/* Due Date */}
-                  <td className="p-4 text-gray-500">
-                    {task.dueDate}
-                  </td>
-
-                  {/* Assigned User */}
-                  <td className="p-4">
-
-                    <div className="flex items-center gap-3">
-                      
-                      <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm">
-                        {task.assignedTo
-                          .charAt(0)}
-                      </div>
-
-                      <span>
-                        {task.assignedTo}
-                      </span>
-
-                    </div>
-
-                  </td>
-
-                  {/* Actions */}
-                  <td className="p-4">
-
-                    <button className="text-sm font-medium hover:underline">
-                      View
-                    </button>
-
-                  </td>
-
-                </tr>
-              ))}
-
-            </tbody>
-
-          </table>
-
-        </Card>
+      <button className="w-full py-2 rounded-lg bg-zinc-900 text-white dark:bg-white dark:text-black font-medium">
+        View
+      </button>
+    </Card>
+  ))}
+</div>
 
       </div>
 

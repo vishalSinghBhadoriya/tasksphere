@@ -165,7 +165,7 @@ function Users() {
         
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-3xl font-bold text-black ">
             Users
           </h1>
 
@@ -219,24 +219,78 @@ function Users() {
             </div>
 
             {/* Empty State */}
-            {paginatedUsers.length ===
-            0 ? (
-              <div className="bg-white p-10 rounded-2xl text-center text-gray-500 shadow-sm">
-                No users found
-              </div>
-            ) : (
-              <UsersTable
-                users={paginatedUsers}
-                onEdit={(user) => {
-                  setEditingUser(user);
+      {/* Empty State */}
+{paginatedUsers.length === 0 ? (
+  <div className="bg-white dark:bg-zinc-900 p-10 rounded-2xl text-center text-gray-500 dark:text-gray-400 shadow-sm">
+    No users found
+  </div>
+) : (
+  <>
+    {/* Mobile + Tablet Card Layout */}
+    <div className="lg:hidden space-y-4">
+      {paginatedUsers.map((user) => (
+        <div
+          key={user.id}
+          className="bg-white text-black rounded-2xl shadow-sm p-4 space-y-4"
+        >
+          {/* User Info */}
+          <div>
+            <h3 className="font-semibold text-lg text-black ">
+              {user.firstName} {user.lastName}
+            </h3>
+            <p className="text-sm text-gray-500 break-all">
+              {user.email}
+            </p>
+          </div>
 
-                  setIsModalOpen(true);
-                }}
-                onDelete={
-                  handleDeleteUser
-                }
-              />
-            )}
+          {/* Additional Details */}
+          <div className="text-sm space-y-2 text-gray-700 ">
+            <p>
+              <span className="font-medium">Role:</span>{" "}
+              {user.role || "N/A"}
+            </p>
+            <p>
+              <span className="font-medium">Status:</span>{" "}
+              {user.status || "Active"}
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-2">
+            <button
+              onClick={() => {
+                setEditingUser(user);
+                setIsModalOpen(true);
+              }}
+              className="flex-1 px-4 py-2 bg-black text-white rounded-lg hover:opacity-90 transition-all"
+            >
+              Edit
+            </button>
+
+            <button
+              onClick={() => handleDeleteUser(user.id)}
+              className="flex-1 px-4 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-950 transition-all"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Desktop Table */}
+    <div className="hidden lg:block">
+      <UsersTable
+        users={paginatedUsers}
+        onEdit={(user) => {
+          setEditingUser(user);
+          setIsModalOpen(true);
+        }}
+        onDelete={handleDeleteUser}
+      />
+    </div>
+  </>
+)}
 
             {/* Pagination */}
             <div className="flex items-center justify-center gap-3 mt-6">

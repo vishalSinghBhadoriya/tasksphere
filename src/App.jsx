@@ -1,5 +1,13 @@
-import { Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import {
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
 import Login from "./pages/Auth/Login";
+
+// Lazy Loaded Pages
 const Dashboard = lazy(() =>
   import("./pages/Dashboard/Dashboard")
 );
@@ -23,28 +31,92 @@ const Analytics = lazy(() =>
 const Settings = lazy(() =>
   import("./pages/Settings/Settings")
 );
-import ProtectedRoute from "./routes/ProtectedRoute";
-import { lazy, Suspense } from "react";
+
+// Protected Route Component
+function ProtectedRoute({ children }) {
+  const isAuthenticated =
+    localStorage.getItem("token");
+
+  return isAuthenticated ? (
+    children
+  ) : (
+    <Navigate to="/" replace />
+  );
+}
+
 function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-    <Routes>
-      <Route path="/" element={<Login />} />
-     <Route
-  path="/dashboard"
-  element={
-    <ProtectedRoute>
-      <Dashboard />
-    </ProtectedRoute>
-  }
-/>
+      <Routes>
 
-      <Route path="/users" element={<Users />} />
-      <Route path="/projects" element={<Projects />} />
-<Route path="/tasks" element={<Tasks />} />
-<Route path="/analytics" element={<Analytics />} />
-<Route path="/settings" element={<Settings />} />
-    </Routes>
+        {/* Public Route */}
+        <Route
+          path="/"
+          element={<Login />}
+        />
+
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <Users />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/projects"
+          element={
+            <ProtectedRoute>
+              <Projects />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute>
+              <Tasks />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <Analytics />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* 404 Route */}
+        <Route
+          path="*"
+          element={<h1>404 Page Not Found</h1>}
+        />
+
+      </Routes>
     </Suspense>
   );
 }
